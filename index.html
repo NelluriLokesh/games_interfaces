@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .menu {
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu > div {
+            width: 25px;
+            height: 3px;
+            background-color: #fff;
+            margin: 3px 0;
+            transition: all 0.3s ease;
+        }
+
+        .menu.open > div:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .menu.open > div:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu.open > div:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .menu-options {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            background-color: #333;
+            border: 1px solid #fff;
+            padding: 10px;
+            display: none;
+            z-index: 1000; /* Ensure it appears above other content */
+        }
+
+        .menu-options.show {
+            display: block;
+        }
+
+        .menu-options a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+        }
+
+        .menu-options a:hover {
+            background-color: #555;
+        }
+
+        .games {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            flex-wrap: wrap;
+            margin-top: 20px;
+            min-height: 100vh; /* Ensure at least full viewport height */
+            padding: 20px; /* Add padding around game blocks */
+        }
+
+        .game-block-wrapper {
+            text-align: center; /* Center align game block */
+            margin: 20px;
+            position: relative; /* Ensure relative positioning for absolute child */
+        }
+
+        .game-block {
+            width: 200px;
+            height: 200px;
+            overflow: hidden;
+            border: 1px solid #333;
+            position: relative;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .game-block img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-block-title {
+            position: absolute;
+            bottom: -30px; /* Initially hide below the game block */
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+            color: #fff;
+            padding: 10px;
+            font-size: 20px;
+            text-align: center;
+            transition: bottom 0.3s ease, font-size 0.3s ease; /* Smooth transition for movement and font size */
+        }
+
+        .game-block:hover .game-block-title {
+            bottom: 0; /* Move title up */
+            font-size: 24px; /* Increase font size */
+        }
+
+        .game-block:hover {
+            transform: scale(1.1); /* Scale up game block on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="menu" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="menu-options" id="menuOptions">
+            <a href="#">Hi, <span id="username">{{ username }}</span></a> <!-- Display username -->
+            <button onclick="goBack()">Logout</button>
+<!-- Link to the logout functionality -->
+        </div>        
+    </div>
+
+    <div class="games">
+        <div class="game-block-wrapper">
+            <div class="game-block">
+                <a href="https://nellurilokesh.github.io/Pong_game_website/">
+                    <img src="https://silverballmuseum.com/wp-content/uploads/2016/05/pong-arcade-game-atari-600x506.jpg" alt="Pong Game">
+                    <div class="game-block-title">Pong Game</div>
+                </a>
+            </div>
+        </div>
+        <div class="game-block-wrapper">
+            <div class="game-block">
+                <a href="https://nellurilokesh.github.io/Tic-tac-toe_game/">
+                    <img src="http://www.wisediy.com/wp-content/uploads/sites/781/2015/11/Screen-Shot-2015-11-27-at-2.52.44-PM-1024x596.png" alt="Tic Tac Toe Game">
+                    <div class="game-block-title">Tic Tac Toe Game</div>
+                </a>
+            </div>
+        </div>
+        <div class="game-block-wrapper">
+            <div class="game-block">
+                <a href="https://nellurilokesh.github.io/Flying_bird_game/">
+                    <img src="https://s1.mzstatic.com/us/r30/Purple/v4/97/47/9b/97479bad-c8dd-1084-cacf-59a0d28f4512/mzl.yucpknoe.jpg" alt="Fly Bird Game">
+                    <div class="game-block-title">Fly Bird Game</div>
+                </a>
+            </div>
+        </div>
+        <div class="game-block-wrapper">
+            <div class="game-block">
+                <a href="https://nellurilokesh.github.io/snake_game_website/">
+                    <img src="https://html5-games.io/data/image/snakelogo.png" alt="Snake Game">
+                    <div class="game-block-title">Snake Game</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            var menuOptions = document.getElementById("menuOptions");
+            menuOptions.classList.toggle("show");
+        }
+
+        function logoutAndGoBack() {
+            // Clear session server-side
+            fetch('http://localhost:5000/logout', { method: 'POST', credentials: 'include' })
+                .then(response => {
+                    if (response.ok) {
+                        // Redirect to specific link after logout
+                        window.location.href = "https://nellurilokesh.github.io/games_interfaces/";
+                    } else {
+                        alert('Logout failed. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error during logout:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        }
+        
+
+        // Retrieve username from query parameter and display
+        window.onload = function() {
+            var params = new URLSearchParams(window.location.search);
+            var username = params.get('username');
+            if (username) {
+                document.getElementById('username').innerText = username;
+            }
+        };
+        function goBack() {
+                window.history.back();
+            }        
+    </script>
+</body>
+</html>
